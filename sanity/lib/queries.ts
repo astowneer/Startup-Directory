@@ -28,6 +28,7 @@ export const STARTUP_BY_ID_QUERY =
   description,
   category,
   image,
+  pitch,
 }`);
 
 export const STARTUP_VIEWS_QUERY = defineQuery(`
@@ -96,5 +97,6 @@ export const PLAYLIST_BY_SLUG_QUERY =
     description,
     category,
     image,
+    pitch
   }
 }`);

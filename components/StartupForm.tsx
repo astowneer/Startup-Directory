@@ -10,9 +10,11 @@ import { z } from "zod";
 import { createPitch } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import MDEditor from "@uiw/react-md-editor";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [pitch, setPitch] = useState("");
   const router = useRouter();
 
   const handleFormSubmit = async (prevState: any, formData: FormData) => {
@@ -22,11 +24,12 @@ const StartupForm = () => {
         description: formData.get("description") as string,
         category: formData.get("category") as string,
         link: formData.get("link") as string,
+        pitch
       };
 
       await formSchema.parseAsync(formValues);
 
-      const result = await createPitch(state, formData);
+      const result = await createPitch(state, formData, pitch);
 
       if (result.status === "SUCCESS") {
         toast("Success", {
@@ -127,6 +130,30 @@ const StartupForm = () => {
         />
 
         {errors.link && <p className="startup-form_error">{errors.link}</p>}
+      </div>
+
+      <div data-color-mode="light">
+        <label htmlFor="pitch" className="startup-form_label">
+          Pitch
+        </label>
+
+        <MDEditor
+          value={pitch}
+          onChange={(value) => setPitch(value as string)}
+          id="pitch"
+          preview="edit"
+          height={300}
+          style={{ borderRadius: 20, overflow: "hidden" }}
+          textareaProps={{
+            placeholder:
+              "Briefly describe your idea and what problem it solves",
+          }}
+          previewOptions={{
+            disallowedElements: ["style"],
+          }}
+        />
+
+        {errors.pitch && <p className="startup-form_error">{errors.pitch}</p>}
       </div>
 
       <Button
